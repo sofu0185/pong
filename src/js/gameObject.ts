@@ -6,6 +6,7 @@ import { Vector } from "./vector";
 export interface GameObject 
 {
     position:Vector;
+    centerPoint: Vector;
     height: number;
     width:number;
 

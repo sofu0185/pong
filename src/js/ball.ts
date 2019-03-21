@@ -14,7 +14,9 @@ export class Ball implements GameObject
     private speed:number = 80;
     private size:number= 20;
     private color: string = "white";
-    private centerPoint: Vector;
+    public get centerPoint(): Vector {
+        return new Vector(this.position.x + this.width, this.position.y + this.height);
+    };
 
     constructor (position:Vector, gameEngine:GameEngine, direction:Vector)
     {
@@ -23,9 +25,6 @@ export class Ball implements GameObject
         this.gameEngine = gameEngine;
         this.height = this.size;
         this.width = this.size;
-        // calculate centerpoint
-        this.centerPoint.x = this.position.x + this.width / 2;
-        this.centerPoint.y = this.position.y + this.height / 2;
     }
 
     // Update method takes care of all logic
@@ -73,13 +72,11 @@ export class Ball implements GameObject
         if(other instanceof Ball){
             this.changeColor();
         }
-
+        
         // reverse direction if ball collides with any object other than framerate
         if(!(other instanceof Framerate))
-        {          
-            
-            this.direction.x *= -1;
-            
+        {
+            this.direction.x *= -1;            
         }
             
     }

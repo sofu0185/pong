@@ -1,22 +1,27 @@
 import { Vector } from "./vector";
 import { GameObject } from "./gameObject";
 import { GameEngine } from "./index";
+import { Ball } from "./ball";
 
 export class Player implements GameObject
 {   
     public playerId: number;
-    public position:Vector 
+    public position:Vector
+    public get centerPoint(): Vector {
+        return new Vector(this.position.x + this.width, this.position.y + this.height);
+    };
     private gameEngine:GameEngine;
 
     private speed:number = 140;
     public height:number = 50;
     public width:number =10;
+    public points: number = 0;
 
     constructor(position:Vector, gameEngine:GameEngine, id: number)
     {
         this.position = position;
         this.gameEngine = gameEngine;
-        this.playerId = id;
+        this.playerId = id; 
     }
 
     update(time: number): void {

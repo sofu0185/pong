@@ -8,12 +8,14 @@ export class Framerate implements GameObject
 {
     height: number;
     width: number;
+    public centerPoint: Vector;
     onColliosion(other: GameObject): void {
     }
    
     constructor(position: Vector)
     {
         this.position = position;
+        this.centerPoint = new Vector(this.position.x + this.width, this.position.y + this.height);
     }
 
     public position:Vector;
