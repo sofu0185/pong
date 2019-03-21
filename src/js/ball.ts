@@ -11,9 +11,9 @@ export class Ball implements GameObject
     private gameEngine:GameEngine;
     public position:Vector;
     private direction:Vector;
-    private speed:number = 60;
+    private speed:number = 80;
     private size:number= 10;
-    private color: string = "#ffffff";
+    private color: string = "white";
 
     constructor (position:Vector, gameEngine:GameEngine, direction:Vector)
     {
@@ -27,12 +27,27 @@ export class Ball implements GameObject
     // Update method takes care of all logic
     update(time: number): void {
         //testing for collisions with walls -> change direction
-        if (this.position.x <=0 || this.position.x >= this.gameEngine.canvasWidth-this.size) this.direction.x *= -1;
-        if (this.position.y <=0 || this.position.y >= this.gameEngine.canvasHeight-this.size) this.direction.y *= -1;
+        if (this.position.x <=0) {
+            this.direction.x *= -1;
+            this.position.x = 0;
+        }
+        else if(this.position.x >= this.gameEngine.canvasWidth-this.size){
+            this.direction.x *= -1;
+            this.position.x = this.gameEngine.canvasWidth-this.size;
+        }
+
+        if (this.position.y <=0)  {
+            this.direction.y *= -1;
+            this.position.y = 0;
+        }
+        else if (this.position.y >= this.gameEngine.canvasHeight-this.size) {
+            this.direction.y *= -1;
+            this.position.y = this.gameEngine.canvasHeight-this.size;
+        }
 
         //testing for Collision with any gameobject
-        this.gameEngine.objects.forEach(elegameobj => {
-        });
+        //this.gameEngine.objects.forEach(elegameobj => {
+        //});
                
         this.position.x += this.direction.x * this.speed * time/1000;
         this.position.y += this.direction.y * this.speed * time/1000;
@@ -53,7 +68,10 @@ export class Ball implements GameObject
 
         // reverse direction if ball collides with any object other than framerate
         if(!(other instanceof Framerate))
+        {
             this.direction.x *= -1;
+        }
+            
     }
 
     changeColor(){

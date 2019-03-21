@@ -38,6 +38,9 @@ export class GameEngine
         this.canvas = <HTMLCanvasElement> document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
 
+        this.canvas.width = 1000;
+        this.canvas.height = 500;
+
         this.canvasWidth = this.canvas.width;
         this.canvasHeight = this.canvas.height;
 
@@ -53,7 +56,7 @@ export class GameEngine
         this.player1 = new Player(new Vector(20,10), this, 0);
         this.objects.push(this.player1);
 
-        this.player2 = new Player(new Vector(this.canvasWidth - 20,10), this, 1);
+        this.player2 = new Player(new Vector(this.canvasWidth - 30,10), this, 1);
         this.objects.push(this.player2);
 
         this.balls.push(new Ball(new Vector(this.canvasWidth/2, this.canvasHeight/2), this, new Vector(.7, 1)));

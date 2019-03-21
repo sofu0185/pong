@@ -8,8 +8,8 @@ export class Player implements GameObject
     public position:Vector 
     private gameEngine:GameEngine;
 
-    private speed:number = 100;
-    public height:number = 30;
+    private speed:number = 140;
+    public height:number = 50;
     public width:number =10;
 
     constructor(position:Vector, gameEngine:GameEngine, id: number)
