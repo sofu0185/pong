@@ -4,26 +4,28 @@ import { GameEngine } from "./index";
 
 export class Player implements GameObject
 {   
+    public playerId: number;
     public position:Vector 
     private gameEngine:GameEngine;
 
-    private speed:number = 40;
+    private speed:number = 100;
     public height:number = 30;
     public width:number =10;
 
-    constructor(position:Vector, gameEngine:GameEngine)
+    constructor(position:Vector, gameEngine:GameEngine, id: number)
     {
         this.position = position;
         this.gameEngine = gameEngine;
+        this.playerId = id;
     }
 
     update(time: number): void {
-        if (this.gameEngine.aKey)
+        if (this.gameEngine.playerKeys[this.playerId].downKey)
         {
             //move down
             this.position.y += time/1000 * this.speed 
         }
-        if (this.gameEngine.qKey)
+        if (this.gameEngine.playerKeys[this.playerId].upKey)
         {
             //move up
             this.position.y -= time/1000 * this.speed

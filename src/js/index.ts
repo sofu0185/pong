@@ -10,18 +10,17 @@ import { Ball } from "./ball";
 
 export class GameEngine
 {
-
     // items in the game
-    public ball:Ball;
+    public balls:Ball[] = [];
     public player1:Player;
+    public player2: Player;
  
     // canvas info
     public canvasWidth:number;
     public canvasHeight:number;
 
     // keep track of key states
-    public aKey:boolean;
-    public qKey:boolean;
+    public playerKeys: { upKey:boolean, downKey:boolean }[];
 
     private canvas:HTMLCanvasElement;
     private ctx:CanvasRenderingContext2D;
@@ -42,6 +41,8 @@ export class GameEngine
         this.canvasWidth = this.canvas.width;
         this.canvasHeight = this.canvas.height;
 
+        this.playerKeys = [{upKey: false, downKey: false}, {upKey: false, downKey: false}];
+
         // listen for keyboard input
         document.addEventListener('keyup', this.keyUp.bind(this));
         document.addEventListener('keydown', this.keyDown.bind(this));
@@ -49,11 +50,17 @@ export class GameEngine
         //ceate gameobjects
         this.objects.push(new Framerate(new Vector(10,10)));
         
-        this.player1 = new Player(new Vector(20,10), this);
+        this.player1 = new Player(new Vector(20,10), this, 0);
         this.objects.push(this.player1);
 
-        this.ball = new Ball(new Vector(this.canvasWidth/2, this.canvasHeight/2), this);
-        this.objects.push(this.ball);
+        this.player2 = new Player(new Vector(this.canvasWidth - 20,10), this, 1);
+        this.objects.push(this.player2);
+
+        this.balls.push(new Ball(new Vector(this.canvasWidth/2, this.canvasHeight/2), this, new Vector(.7, 1)));
+        this.objects.push(this.balls[0]);
+
+        this.balls.push(new Ball(new Vector(this.canvasWidth/ 3, this.canvasHeight/2), this, new Vector(2, .2)));
+        this.objects.push(this.balls[1])
 
         this.gameLoop();
     }
@@ -63,11 +70,22 @@ export class GameEngine
     {
         if (event.repeat) {return};
         switch (event.key) {
-            case "a":
-                this.aKey = true;
-                break;
+            // player 1 up
             case "q":
-                this.qKey = true;
+                this.playerKeys[0].upKey = true;
+                break;
+            // player 1 down
+            case "a":
+                this.playerKeys[0].downKey = true;
+                break;
+            // player 2 up
+            case "ArrowUp":
+                this.playerKeys[1].upKey = true;
+                break;
+            // player 2 down
+            case "ArrowDown":
+                this.playerKeys[1].downKey = true;
+                break;
         }
     }
 
@@ -75,21 +93,31 @@ export class GameEngine
     private keyUp(event: KeyboardEvent): void
     {
         switch (event.key) {
-            case "a":
-                this.aKey=false;
-                break;
+            // player 1 up
             case "q":
-                this.qKey=false;
+                this.playerKeys[0].upKey = false;
                 break;
-        }   
+            // player 1 down
+            case "a":
+                this.playerKeys[0].downKey = false;
+                break;
+            // player 2 up
+            case "ArrowUp":
+                this.playerKeys[1].upKey = false;
+                break;
+            // player 2 down
+            case "ArrowDown":
+                this.playerKeys[1].downKey = false;
+                break;
+        }  
     } 
     
     // a very good explanation of how rectangular collision works: https://silentmatt.com/rectangle-intersection/
     private Collide(a:GameObject, b:GameObject): boolean {
         if (a.position.x < (b.position.x+b.width) &&
             (a.position.x+a.width) > b.position.x &&
-            a.position.y < (b.position.y+a.height) &&
-            a.position.y+b.height > b.position.y)
+            a.position.y < (b.position.y+b.height) &&
+            a.position.y+a.height > b.position.y)
             {
                 return true;
             }
@@ -119,13 +147,14 @@ export class GameEngine
                     }
                 }
             });
-            
-            //every element is updated
-            element.update(time);
-
-            // every element is drawn on canvas
-            element.draw(this.ctx);
         });
+        this.objects.forEach(element => {
+             //every element is updated
+             element.update(time);
+
+             // every element is drawn on canvasqa
+             element.draw(this.ctx);
+        })
         
         // call the main gamelop again (~60fps by default)
         window.requestAnimationFrame(this.gameLoop.bind(this));
