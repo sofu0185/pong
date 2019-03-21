@@ -21,12 +21,12 @@ export class Player implements GameObject
 
     update(time: number): void {
         //testing for collisions with walls -> stop moving
-        if (this.position.y < 0)  {
-            this.position.y = 0;
+        if (this.position.y < this.width)  {
+            this.position.y = this.width;
             return;
         }
-        else if (this.position.y > this.gameEngine.canvasHeight-this.height) {
-            this.position.y = this.gameEngine.canvasHeight-this.height;
+        else if (this.position.y > this.gameEngine.canvasHeight- this.height - this.width) {
+            this.position.y = this.gameEngine.canvasHeight-this.height - this.width;
             return;
         }
 
