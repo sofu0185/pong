@@ -10,12 +10,13 @@ export class Ball implements GameObject
     public width: number;
     private gameEngine:GameEngine;
     public position:Vector;
-    private direction:Vector;
+    public direction:Vector;
     private speed:number = 80;
+    private initialSpeed: number;
     private size:number= 20;
     private color: string = "white";
     public get centerPoint(): Vector {
-        return new Vector(this.position.x + this.width, this.position.y + this.height);
+        return new Vector(this.position.x + (this.width / 2), this.position.y + (this.height / 2));
     };
 
     constructor (position:Vector, gameEngine:GameEngine, direction:Vector)
@@ -25,6 +26,7 @@ export class Ball implements GameObject
         this.gameEngine = gameEngine;
         this.height = this.size;
         this.width = this.size;
+        this.initialSpeed = this.speed;
     }
 
     // Update method takes care of all logic
@@ -51,7 +53,10 @@ export class Ball implements GameObject
         //testing for Collision with any gameobject
         //this.gameEngine.objects.forEach(elegameobj => {
         //});
-               
+        
+        if(this.speed > this.initialSpeed)
+            this.speed -= .2;
+
         this.position.x += this.direction.x * this.speed * time/1000;
         this.position.y += this.direction.y * this.speed * time/1000;
     }
@@ -68,17 +73,39 @@ export class Ball implements GameObject
     
     // in case of any collision this method is called
     onColliosion(other: GameObject): void {
-        // reverse direction if player collides with ball
-        if(other instanceof Ball){
-            this.changeColor();
-        }
-        
         // reverse direction if ball collides with any object other than framerate
         if(!(other instanceof Framerate))
         {
-            this.direction.x *= -1;            
-        }
+            if(other instanceof Ball){
+                // change color of ball if it collides with another ball
+                this.changeColor();
+
+                // speed ball up if two ball going same direction hit each other
+                if(other.direction.x > 0 && this.direction.x > 0){
+                    if(this.position.x < other.position.x){
+                        this.direction.x *= -1;
+                    }
+                    else 
+                        this.speed *= 5;
+                        
+                }
+                else if(other.direction.x < 0 && this.direction.x < 0){
+                    if(this.position.x > other.position.x){
+                        this.direction.x *= -1;
+                    }
+                    else
+                        this.speed *= 5;
+                }
+                else 
+                    this.direction.x *= -1;     
+            }
+            else
+                this.direction.x *= -1;
             
+                console.log(this);
+                console.log(other);
+            
+        } 
     }
 
     changeColor(){
@@ -89,5 +116,4 @@ export class Ball implements GameObject
         else
             this.color = "white";
     }
-
 }

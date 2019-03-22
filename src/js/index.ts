@@ -53,13 +53,13 @@ export class GameEngine
         //ceate gameobjects
         this.objects.push(new Framerate(new Vector(10,10)));
         
-        this.player1 = new Player(new Vector(20,10), this, 0);
+        this.player1 = new Player(new Vector(10,10), this, 0);
         this.objects.push(this.player1);
 
-        this.player2 = new Player(new Vector(this.canvasWidth - 30,10), this, 1);
+        this.player2 = new Player(new Vector(this.canvasWidth - 15,10), this, 1);
         this.objects.push(this.player2);
 
-        this.balls.push(new Ball(new Vector(this.canvasWidth/2, this.canvasHeight/2), this, new Vector(.7, 1)));
+        this.balls.push(new Ball(new Vector(this.canvasWidth/2, this.canvasHeight/2), this, new Vector(.7, .2)));
         this.objects.push(this.balls[0]);
 
         this.balls.push(new Ball(new Vector(this.canvasWidth/ 3, this.canvasHeight/2), this, new Vector(2, .2)));

@@ -8,13 +8,13 @@ export class Player implements GameObject
     public playerId: number;
     public position:Vector
     public get centerPoint(): Vector {
-        return new Vector(this.position.x + this.width, this.position.y + this.height);
+        return new Vector(this.position.x + (this.width / 2), this.position.y + (this.height / 2));
     };
     private gameEngine:GameEngine;
 
     private speed:number = 140;
-    public height:number = 50;
-    public width:number =10;
+    public height:number = 60;
+    public width:number =5;
     public points: number = 0;
 
     constructor(position:Vector, gameEngine:GameEngine, id: number)

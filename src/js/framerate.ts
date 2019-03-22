@@ -8,14 +8,13 @@ export class Framerate implements GameObject
 {
     height: number;
     width: number;
-    public centerPoint: Vector;
+    get centerPoint(): Vector { return new Vector(this.position.x + (this.width / 2), this.position.y + (this.height / 2))};
     onColliosion(other: GameObject): void {
     }
    
     constructor(position: Vector)
     {
         this.position = position;
-        this.centerPoint = new Vector(this.position.x + this.width, this.position.y + this.height);
     }
 
     public position:Vector;
@@ -23,7 +22,6 @@ export class Framerate implements GameObject
     update(time: number): void {
         this.time = time;
     }
-
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = "#ffffff";
