@@ -12,9 +12,9 @@ export class Player implements GameObject
     };
     private gameEngine:GameEngine;
 
-    private speed:number = 140;
+    private speed:number = 160;
     public height:number = 60;
-    public width:number =5;
+    public width:number = 5;
     public points: number = 0;
 
     constructor(position:Vector, gameEngine:GameEngine, id: number)

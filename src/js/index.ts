@@ -3,6 +3,7 @@ import { Framerate } from "./framerate";
 import { Vector } from "./vector";
 import { Player } from "./player";
 import { Ball } from "./ball";
+import { Powerup, PowerupType } from "./powerup";
 
 /*
     THis is the main PONG GAME script
@@ -12,8 +13,7 @@ export class GameEngine
 {
     // items in the game
     public balls:Ball[] = [];
-    public player1:Player;
-    public player2: Player;
+    public players: Player[] = [];
  
     // canvas info
     public canvasWidth:number;
@@ -53,17 +53,27 @@ export class GameEngine
         //ceate gameobjects
         this.objects.push(new Framerate(new Vector(10,10)));
         
-        this.player1 = new Player(new Vector(10,10), this, 0);
-        this.objects.push(this.player1);
+        this.players.push(new Player(new Vector(10,10), this, 0));
+        this.objects.push(this.players[0]);
 
-        this.player2 = new Player(new Vector(this.canvasWidth - 15,10), this, 1);
-        this.objects.push(this.player2);
+        this.players.push(new Player(new Vector(this.canvasWidth - 15,10), this, 1));
+        this.objects.push(this.players[1]);
 
         this.balls.push(new Ball(new Vector(this.canvasWidth/2, this.canvasHeight/2), this, new Vector(.7, .2)));
         this.objects.push(this.balls[0]);
 
         this.balls.push(new Ball(new Vector(this.canvasWidth/ 3, this.canvasHeight/2), this, new Vector(2, .2)));
         this.objects.push(this.balls[1])
+
+        this.objects.push(new Powerup(new Vector(500, 60), this));
+
+        setInterval(() => {
+            let randNumb: number = GameEngine.getRndInteger(1, 100);
+
+            if(randNumb > 90){
+                this.objects.push(new Powerup(new Vector(GameEngine.getRndInteger(200, 800), GameEngine.getRndInteger(100, 400)), this))
+            }
+        }, 1000);
 
         this.gameLoop();
     }
@@ -165,6 +175,11 @@ export class GameEngine
 
 
     }
+
+    static getRndInteger(min: number, max: number): number{
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
 }
 
 //start gameengine

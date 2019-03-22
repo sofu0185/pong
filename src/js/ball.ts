@@ -3,6 +3,7 @@ import { GameObject } from "./gameObject";
 import { GameEngine } from "./index";
 import { Player } from "./player";
 import { Framerate } from "./framerate";
+import { Powerup } from "./powerup";
 
 export class Ball implements GameObject
 {
@@ -11,8 +12,8 @@ export class Ball implements GameObject
     private gameEngine:GameEngine;
     public position:Vector;
     public direction:Vector;
-    private speed:number = 80;
-    private initialSpeed: number;
+    public speed:number = 80;
+    public initialSpeed: number;
     private size:number= 20;
     private color: string = "white";
     public get centerPoint(): Vector {
@@ -53,9 +54,14 @@ export class Ball implements GameObject
         //testing for Collision with any gameobject
         //this.gameEngine.objects.forEach(elegameobj => {
         //});
-        
+
+        // hard limit of 500 speed
+        if(this.speed > 500)
+            this.speed = 500;
+
+        // slow ball down
         if(this.speed > this.initialSpeed)
-            this.speed -= .2;
+            this.speed -= 20  * time / 1000;
 
         this.position.x += this.direction.x * this.speed * time/1000;
         this.position.y += this.direction.y * this.speed * time/1000;
@@ -74,7 +80,7 @@ export class Ball implements GameObject
     // in case of any collision this method is called
     onColliosion(other: GameObject): void {
         // reverse direction if ball collides with any object other than framerate
-        if(!(other instanceof Framerate))
+        if(!(other instanceof Framerate) && !(other instanceof Powerup))
         {
             if(other instanceof Ball){
                 // change color of ball if it collides with another ball
@@ -86,7 +92,7 @@ export class Ball implements GameObject
                         this.direction.x *= -1;
                     }
                     else 
-                        this.speed *= 5;
+                        this.speed += 5 * this.initialSpeed;
                         
                 }
                 else if(other.direction.x < 0 && this.direction.x < 0){
@@ -94,17 +100,13 @@ export class Ball implements GameObject
                         this.direction.x *= -1;
                     }
                     else
-                        this.speed *= 5;
+                        this.speed += 5 * this.initialSpeed;
                 }
                 else 
                     this.direction.x *= -1;     
             }
             else
                 this.direction.x *= -1;
-            
-                console.log(this);
-                console.log(other);
-            
         } 
     }
 
