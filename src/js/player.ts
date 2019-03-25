@@ -49,6 +49,7 @@ export class Player implements GameObject
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        ctx.fillStyle = '#000000'
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 

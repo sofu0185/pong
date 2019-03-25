@@ -70,10 +70,10 @@ export class GameEngine
         setInterval(() => {
             let randNumb: number = GameEngine.getRndInteger(1, 100);
 
-            if(randNumb > 90){
+            if(randNumb > 99){
                 this.objects.push(new Powerup(new Vector(GameEngine.getRndInteger(200, 800), GameEngine.getRndInteger(100, 400)), this))
             }
-        }, 1000);
+        }, 100);
 
         this.gameLoop();
     }
